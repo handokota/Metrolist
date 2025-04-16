@@ -1,1 +1,6 @@
 /build
+/universal
+/arm64
+/armeabi
+/x86
+/x86_64
