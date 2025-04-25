@@ -14,7 +14,7 @@ val DefaultOpenTabKey = stringPreferencesKey("defaultOpenTab")
 val SlimNavBarKey = booleanPreferencesKey("slimNavBar")
 val GridItemsSizeKey = stringPreferencesKey("gridItemSize")
 val SliderStyleKey = stringPreferencesKey("sliderStyle")
-val SwipeSongToAddKey = booleanPreferencesKey("swipe_song_to_Add")
+val SwipeToSongKey = booleanPreferencesKey("SwipeToSong")
 
 enum class SliderStyle {
     DEFAULT,
@@ -93,6 +93,11 @@ val PlaylistEditLockKey = booleanPreferencesKey("playlistEditLock")
 val QuickPicksKey = stringPreferencesKey("discover")
 val PreferredLyricsProviderKey = stringPreferencesKey("lyricsProvider")
 val QueueEditLockKey = booleanPreferencesKey("queueEditLock")
+
+val ShowLikedPlaylistKey = booleanPreferencesKey("show_liked_playlist")
+val ShowDownloadedPlaylistKey = booleanPreferencesKey("show_downloaded_playlist")
+val ShowTopPlaylistKey = booleanPreferencesKey("show_top_playlist")
+val ShowCachedPlaylistKey = booleanPreferencesKey("show_cached_playlist")
 
 enum class LibraryViewType {
     LIST,
