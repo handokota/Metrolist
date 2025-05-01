@@ -266,6 +266,9 @@ fun SongListItem(
         if (showLikedIcon && song.song.liked) {
             Icon.Favorite()
         }
+        if (song.song.explicit) {
+            Icon.Explicit()
+        }
         if (showInLibraryIcon && song.song.inLibrary != null) {
             Icon.Library()
         }
@@ -287,7 +290,7 @@ fun SongListItem(
         ListItem(
             title = song.song.title,
             subtitle = joinByBullet(
-                song.artists.joinToString { it.name },
+                song.song.artistName ?: song.artists.joinToString { it.name },
                 makeTimeString(song.song.duration * 1000L)
             ),
             badges = badges,
@@ -356,7 +359,7 @@ fun SongGridItem(
     subtitle = {
         Text(
             text = joinByBullet(
-                song.artists.joinToString { it.name },
+                song.song.artistName ?: song.artists.joinToString { it.name },
                 makeTimeString(song.song.duration * 1000L)
             ),
             style = MaterialTheme.typography.bodyMedium,
@@ -731,7 +734,7 @@ fun MediaMetadataListItem(
     ListItem(
         title = mediaMetadata.title,
         subtitle = joinByBullet(
-            mediaMetadata.artists.joinToString { it.name },
+            mediaMetadata.artistName ?: mediaMetadata.artists.joinToString { it.name },
             makeTimeString(mediaMetadata.duration * 1000L)
         ),
         thumbnailContent = {
@@ -1027,6 +1030,14 @@ fun ItemThumbnail(
             .aspectRatio(thumbnailRatio)
             .clip(shape)
     ) {
+        AsyncImage(
+            model = thumbnailUrl,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(shape)
+        )
+
         if (albumIndex != null) {
             AnimatedVisibility(
                 visible = !isActive,
@@ -1038,29 +1049,22 @@ fun ItemThumbnail(
                     style = MaterialTheme.typography.labelLarge
                 )
             }
-        } else {
-            if (isSelected) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .zIndex(1f)
-                        .clip(shape)
-                        .background(Color.Black.copy(alpha = 0.5f))
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.done),
-                        contentDescription = null
-                    )
-                }
-            }
-            AsyncImage(
-                model = thumbnailUrl,
-                contentDescription = null,
+        }
+
+        if (isSelected) {
+            Box(
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
+                    .zIndex(1f)
                     .clip(shape)
-            )
+                    .background(Color.Black.copy(alpha = 0.5f))
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.done),
+                    contentDescription = null
+                )
+            }
         }
 
         PlayingIndicatorBox(

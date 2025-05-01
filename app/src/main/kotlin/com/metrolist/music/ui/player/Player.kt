@@ -95,7 +95,6 @@ import com.metrolist.music.constants.DarkModeKey
 import com.metrolist.music.constants.PlayerBackgroundStyle
 import com.metrolist.music.constants.PlayerBackgroundStyleKey
 import com.metrolist.music.constants.PlayerHorizontalPadding
-import com.metrolist.music.constants.PureBlackKey
 import com.metrolist.music.constants.QueuePeekHeight
 import com.metrolist.music.constants.ShowLyricsKey
 import com.metrolist.music.constants.SliderStyle
@@ -133,6 +132,7 @@ fun BottomSheetPlayer(
     state: BottomSheetState,
     navController: NavController,
     modifier: Modifier = Modifier,
+    pureBlack: Boolean,
 ) {
     val context = LocalContext.current
     val menuState = LocalMenuState.current
@@ -153,7 +153,6 @@ fun BottomSheetPlayer(
 
     val isSystemInDarkTheme = isSystemInDarkTheme()
     val darkTheme by rememberEnumPreference(DarkModeKey, defaultValue = DarkMode.AUTO)
-    val pureBlack by rememberPreference(PureBlackKey, defaultValue = false)
     val useDarkTheme = remember(darkTheme, isSystemInDarkTheme) {
         if (darkTheme == DarkMode.AUTO) isSystemInDarkTheme else darkTheme == DarkMode.ON
     }
@@ -487,6 +486,7 @@ fun BottomSheetPlayer(
             MiniPlayer(
                 position = position,
                 duration = duration,
+                pureBlack = pureBlack,
             )
         },
     ) {
@@ -537,12 +537,12 @@ fun BottomSheetPlayer(
                     ) {
                         mediaMetadata.artists.fastForEachIndexed { index, artist ->
                             AnimatedContent(
-                                targetState = artist.name,
+                                targetState = mediaMetadata.artistName ?: artist.name,
                                 transitionSpec = { fadeIn() togetherWith fadeOut() },
                                 label = "",
                             ) { name ->
                                 Text(
-                                    text = name,
+                                    text = mediaMetadata.artistName ?: name,
                                     style = MaterialTheme.typography.titleMedium,
                                     color = TextBackgroundColor,
                                     maxLines = 1,
@@ -971,6 +971,7 @@ fun BottomSheetPlayer(
             },
             onBackgroundColor = onBackgroundColor,
             TextBackgroundColor = TextBackgroundColor,
+            pureBlack = pureBlack,
         )
     }
 }
